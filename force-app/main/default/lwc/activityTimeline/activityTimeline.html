@@ -26,7 +26,7 @@
                 <template if:false={isLoading}>
                     <template if:true={hasTimelineData}>
                         <li if:false={showHeader}
-                            class="slds-timeline__actions slds-timeline__actions_inline slds-is-relative">
+                            class="slds-actions slds-actions_inline slds-is-relative">
                             <c-timeline-filter-panel object-filters={filteredObjects}
                                 available-objects={availableObjects} onchange={handleFilterChange}>
                             </c-timeline-filter-panel>

@@ -57,7 +57,7 @@ export default class TimelineNote extends LightningElement {
     }
 
     get itemStyle() {
-        return this.expanded ? "slds-timeline__item_expandable slds-is-open" : "slds-timeline__item_expandable";
+        return this.expanded ? "slds-item_expandable slds-is-open" : "slds-item_expandable";
     }
 
     get shouldNavigateToRecord(){

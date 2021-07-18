@@ -20,7 +20,7 @@
                     <lightning-icon icon-name={iconName} size="small"></lightning-icon>
                 </div>
                 <div class="slds-media__body">
-                    <div class="slds-grid slds-grid_align-spread slds-timeline__trigger">
+                    <div class="slds-grid slds-grid_align-spread slds-trigger">
                         <div class="slds-grid slds-grid_vertical-align-center slds-truncate_container_75 slds-no-space">
                             <h3 class="slds-truncate" title={title}>
                                 <a onclick={navigateToTask}>
@@ -36,9 +36,9 @@
                                 </template>
                             </h3>
                         </div>
-                        <div class="slds-timeline__actions slds-timeline__actions_inline">
+                        <div class="slds-actions slds-actions_inline">
                             <template if:true={isOverdue}>
-                                <strong><p class="slds-timeline__date overdue">
+                                <strong><p class="slds-date overdue">
                                     <template if:false={displayRelativeDates}>
                                         <lightning-formatted-date-time value={dateValue}></lightning-formatted-date-time>
                                     </template>
@@ -48,7 +48,7 @@
                                 </p></strong>
                             </template>
                             <template if:false={isOverdue}>
-                                <p class="slds-timeline__date">
+                                <p class="slds-date">
                                     <template if:false={displayRelativeDates}>
                                         <lightning-formatted-date-time value={dateValue}></lightning-formatted-date-time>
                                     </template>
