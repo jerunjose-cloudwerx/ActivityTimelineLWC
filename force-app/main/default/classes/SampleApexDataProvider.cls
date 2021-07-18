@@ -24,14 +24,14 @@ global class SampleApexDataProvider extends AbstractTimelineDataProvider {
         return new List<String>{'Subject','CreatedDate','CreatedById','OwnerId','Status','ClosedDate'};
     }
 
-    global override List<timeline.TimelineFieldType> getFieldsToDisplayWithTypes(){
-        List<timeline.TimelineFieldType> fieldTypes= new List<timeline.TimelineFieldType>();
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Created By','CreatedById',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Owner','OwnerId',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Status','Status',Schema.DisplayType.String));
-        fieldTypes.add(timeline.TimelineFieldType.newInstance('Date/Time Closed','ClosedDate',Schema.DisplayType.String));
+    global override List<TimelineFieldType> getFieldsToDisplayWithTypes(){
+        List<TimelineFieldType> fieldTypes= new List<TimelineFieldType>();
+        fieldTypes.add(TimelineFieldType.newInstance('Subject','Subject',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Created Date','CreatedDate',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Created By','CreatedById',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Owner','OwnerId',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Status','Status',Schema.DisplayType.String));
+        fieldTypes.add(TimelineFieldType.newInstance('Date/Time Closed','ClosedDate',Schema.DisplayType.String));
         return fieldTypes;
     }
     global override String getBaseUrlForRecordDetail(){

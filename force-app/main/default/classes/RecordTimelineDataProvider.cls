@@ -15,18 +15,18 @@ public with sharing class RecordTimelineDataProvider {
         log.add('confIdOrName='+confIdOrName+', record Id:'+recordId+',dateFilter:'+dateFilter);
         if(recordId !=null && confIdOrName!=null){
             if(areObjectAndFieldsAccessible()){
-                Timeline_Configuration__c conf  = [ select Id,timeline__Object__c,timeline__Display_Relative_Dates__c,
-                                                    (SELECT timeline__Date_Field__c,timeline__Fields_to_Display__c,timeline__Icon_Image_Url__c,
-                                                            timeline__Icon_Name__c,Id,Name,timeline__Object_Color__c,timeline__Object__c,timeline__Relationship_Name__c,
-                                                            timeline__Title_Field__c,timeline__LWC_Ui_Api_Not_Supported__c,timeline__Data_Provider_Type__c,
-                                                            timeline__Provider_Apex_Classname__c,timeline__Reference_Field_Name__c,
-                                                            timeline__Where_Clause__c,timeline__Display_Object_Name__c,timeline__Title_link_Navigate_to__c,
-                                                            timeline__Overdue_Field__c
-                                                    FROM timeline__Timeline_Child_Objects__r)
-                                                    from timeline__Timeline_Configuration__c
+                Timeline_Configuration__c conf  = [ select Id,Object__c,Display_Relative_Dates__c,
+                                                    (SELECT Date_Field__c,Fields_to_Display__c,Icon_Image_Url__c,
+                                                            Icon_Name__c,Id,Name,Object_Color__c,Object__c,Relationship_Name__c,
+                                                            Title_Field__c,LWC_Ui_Api_Not_Supported__c,Data_Provider_Type__c,
+                                                            Provider_Apex_Classname__c,Reference_Field_Name__c,
+                                                            Where_Clause__c,Display_Object_Name__c,Title_link_Navigate_to__c,
+                                                            Overdue_Field__c
+                                                    FROM Timeline_Child_Objects__r)
+                                                    from Timeline_Configuration__c
                                                     where (Id=:confIdOrName or Name=:confIdOrName)
                                                 ];
-                if(!conf.timeline__Timeline_Child_Objects__r.isEmpty()){
+                if(!conf.Timeline_Child_Objects__r.isEmpty()){
                     //String soqlToExec = getSOQLForTimeline(conf, recordId,dateFilter);
                     String soqlToExec = TimelineSOQLUtils.getSOQLForTimeline(conf, recordId,dateFilter);
                     System.debug('>>>>>>>>> '+soqlToExec);
@@ -64,7 +64,7 @@ public with sharing class RecordTimelineDataProvider {
         return (Timeline_Configuration__c.sObjectType.getDescribe().isAccessible() &&
                 Timeline_Child_Object__c.sObjectType.getDescribe().isAccessible() &&
                 Schema.sObjectType.Timeline_Configuration__c.fields.Object__c.isAccessible() &&
-                Schema.SObjectType.Timeline_Configuration__c.fields.timeline__Display_Relative_Dates__c.isAccessible() &&  
+                Schema.SObjectType.Timeline_Configuration__c.fields.Display_Relative_Dates__c.isAccessible() &&  
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Date_Field__c.isAccessible() &&
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Fields_to_Display__c.isAccessible() &&
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Icon_Image_Url__c.isAccessible() &&
@@ -75,9 +75,9 @@ public with sharing class RecordTimelineDataProvider {
                 Schema.sObjectType.Timeline_Child_Object__c.fields.Title_Field__c.isAccessible() &&
                 Schema.SObjectType.Timeline_Child_Object__c.fields.Data_Provider_Type__c.isAccessible() &&
                 Schema.SObjectType.Timeline_Child_Object__c.fields.LWC_Ui_Api_Not_Supported__c.isAccessible() &&
-                Schema.SObjectType.Timeline_Child_Object__c.fields.timeline__Provider_Apex_Classname__c.isAccessible() && 
-                Schema.SObjectType.Timeline_Child_Object__c.fields.timeline__Title_link_Navigate_to__c.isAccessible() &&
-                Schema.SObjectType.Timeline_Child_Object__c.fields.timeline__Overdue_Field__c.isAccessible());
+                Schema.SObjectType.Timeline_Child_Object__c.fields.Provider_Apex_Classname__c.isAccessible() && 
+                Schema.SObjectType.Timeline_Child_Object__c.fields.Title_link_Navigate_to__c.isAccessible() &&
+                Schema.SObjectType.Timeline_Child_Object__c.fields.Overdue_Field__c.isAccessible());
     }
 
 
@@ -143,10 +143,10 @@ public with sharing class RecordTimelineDataProvider {
         }
     }
 
-    private static List<ObjectNote> getNotes(timeline__Timeline_Configuration__c conf,String linkedEntityId,String datefilter,List<String> log){
+    private static List<ObjectNote> getNotes(Timeline_Configuration__c conf,String linkedEntityId,String datefilter,List<String> log){
         List<ObjectNote> notes;
-        for(timeline__Timeline_Child_Object__c childObjConf: conf.timeline__Timeline_Child_Objects__r){
-            if(childObjConf.timeline__Object__c == 'ContentDocumentLink'){
+        for(Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
+            if(childObjConf.Object__c == 'ContentDocumentLink'){
                 notes = new List<ObjectNote>();
                 List<Id> docIds = new List<Id>();
                 for(ContentDocumentLink attachNote:[select Id,ContentDocumentId from ContentDocumentLink where LinkedEntityId=:linkedEntityId]){
@@ -192,11 +192,11 @@ public with sharing class RecordTimelineDataProvider {
         return notes;
         
     }
-    private static Map<String,TimelineDataResponse.ApexConfigAndData> getDataFromApexProviders(timeline__Timeline_Configuration__c conf,String recordId,String datefilter){
+    private static Map<String,TimelineDataResponse.ApexConfigAndData> getDataFromApexProviders(Timeline_Configuration__c conf,String recordId,String datefilter){
         Map<String,TimelineDataResponse.ApexConfigAndData> apexData = new Map<String,TimelineDataResponse.ApexConfigAndData>();
-        for(timeline__Timeline_Child_Object__c childObjConf: conf.timeline__Timeline_Child_Objects__r){
-            if(childObjConf.timeline__Data_Provider_Type__c == 'Apex class'){
-                Type providerClass = Type.forName(childObjConf.timeline__Provider_Apex_Classname__c);
+        for(Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
+            if(childObjConf.Data_Provider_Type__c == 'Apex class'){
+                Type providerClass = Type.forName(childObjConf.Provider_Apex_Classname__c);
                 AbstractTimelineDataProvider provider = (AbstractTimelineDataProvider)providerClass.newInstance();
                 TimelineDataResponse.ApexConfigAndData apexResp = new TimelineDataResponse.ApexConfigAndData();
                 apexResp.apexData=provider.getData(recordId, dateFilter);
@@ -205,7 +205,7 @@ public with sharing class RecordTimelineDataProvider {
                 apexResp.fieldsWithTypes=provider.getFieldsToDisplayWithTypes();
                 apexResp.isSalesforceObject=provider.isSalesforceObject();
                 apexResp.isUiApiNotSupported=provider.isUiApiNotSupported();
-                apexData.put(childObjConf.timeline__Relationship_Name__c,apexResp);
+                apexData.put(childObjConf.Relationship_Name__c,apexResp);
             }
         }
         return apexData;
@@ -213,9 +213,9 @@ public with sharing class RecordTimelineDataProvider {
 
     private static Map<String,String> getChildObjectLabels(Timeline_Configuration__c conf){
         List<String> childObjects = new List<String>();
-        for(timeline__Timeline_Child_Object__c childObjConf: conf.timeline__Timeline_Child_Objects__r){
-            if(childObjConf.timeline__Data_Provider_Type__c ==null || childObjConf.timeline__Data_Provider_Type__c != 'Apex class'){
-                childObjects.add(childObjConf.timeline__Object__c);
+        for(Timeline_Child_Object__c childObjConf: conf.Timeline_Child_Objects__r){
+            if(childObjConf.Data_Provider_Type__c ==null || childObjConf.Data_Provider_Type__c != 'Apex class'){
+                childObjects.add(childObjConf.Object__c);
             }
         }
         
