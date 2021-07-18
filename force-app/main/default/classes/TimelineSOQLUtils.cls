@@ -2,9 +2,7 @@ public with sharing class TimelineSOQLUtils {
     public static String getSOQLForTimeline(timeline__Timeline_Configuration__c conf,String recordId,String dateFilter){
         String soqlStmt = 'select Id,';
         List<String> childSoqls = new List<String>();
-        for(timeline__Timeline_Child_Object__c childObjConf: conf.timeline__Timeline_Child_Objects__r){
-            if(childObjConf.timeline__Data_Provider_Type__c ==null || childObjConf.timeline__Data_Provider_Type__c != 'Apex class' && 
-                childObjConf.timeline__Object__c !  = 'ContentDocumentLink'){
+                childObjConf.Object__c != 'ContentDocumentLink'){
                 childSoqls.add(getSoqlForChildConfig(childObjConf,recordId,dateFilter,false));
             }
         }
